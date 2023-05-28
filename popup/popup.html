@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="popup.css">
+</head>
+<body>
+    <div id="icon">
+        <img src="images/privacy.png" alt="Privacy Icon">
+    </div>
+
+    <h1 class = "title">Luca's Web Privacy Plugin</h1>
+    <p id="description">Web monitoring active.</p>
+    
+    <p id="tab-domain"></p>
+    
+    <p id="privacy-score"></p>
+    
+    <hr>
+    
+    <h2>Third-Party Connections</h2>
+    <button id="get-urls">Get Third-Party URLs Log</button>
+    <ul id="urls-list"></ul>
+    
+    <hr> 
+    
+    <h2>Cookies</h2>
+    <button id="check-cookies">Get Cookies on this page</button>
+    <p id="session-count"></p>
+    <p id="first-party-count"></p>
+    <p id="third-party-count"></p>
+    <p id="persistent-count"></p>
+    <hr>
+    <p id="total-count"></p>
+    
+    
+    <hr>
+    
+    <h2>Local Storage</h2>
+    <button id="check-localStorage">Check Local Storage</button>
+    <div id="localStorage-status"></div>
+    <ul id="localStorage-data"></ul>
+    
+    <hr>
+
+    <button id="clear">Clear Logs</button>
+    
+    <script src="popup.js"></script>
+    
+</body>
+</html>
