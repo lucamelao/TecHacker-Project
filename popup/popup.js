@@ -120,6 +120,26 @@ function countCookies(cookies, domain) {
   document.getElementById("total-count").textContent = `Total Cookies: ${cookies.length}`;
 }
 
+function detectSyncronism(cookies) {
+
+  let cookieMap = new Map();
+
+  for (let cookie of cookies) {
+      if (cookieMap.has(cookie.value)) {
+          cookieMap.get(cookie.value).push(cookie.domain);
+      } else {
+          cookieMap.set(cookie.value, [cookie.domain]);
+      }
+  }
+
+  for (let [value, domains] of cookieMap) {
+      if (domains.length > 1) {
+          document.getElementById("sync-cookies-status").textContent = `Possible syncing of ${value} between these domains: ${domains.join(", ")}`;
+        }
+  }
+
+}
+
 function clearLogs() {
   
   // Limpa as URLs de terceiros
@@ -169,6 +189,11 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById("check-cookies").addEventListener('click', async function() {
         let cookies = await browser.cookies.getAll({url: url.href});
         countCookies(cookies, url.hostname);
+      });
+
+      document.getElementById("sync-cookies").addEventListener('click', async function() {
+        let cookies = await browser.cookies.getAll({url: url.href});
+        detectSyncronism(cookies);
       });
 
       // Limpa os logs do popup

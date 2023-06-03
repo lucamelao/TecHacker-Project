@@ -121,11 +121,14 @@ button#check-cookies {
   background-color: #7d5ad5;
 }
 
+button#sync-cookies {
+  background-color: #7d5ad5;
+}
+
 button#clear:hover {
   background-color: darkred;
 }
 
 #localStorage-status {
-  margin: 5px 0;
   font-weight: bold;
 }

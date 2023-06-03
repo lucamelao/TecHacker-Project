@@ -14,6 +14,32 @@ const handleThirdPartyRequests = requestDetails => {
       console.log("%c[3rd Party] Detecção de requisição de terceiros:", 'color: blue;', requestDetails.url);
       thirdPartyUrls.push(requestDetails.url);
     }
+
+    // Criando um map para rastrear cookies para detecção de sincronização de cookies
+    const cookieMap = new Map();
+
+    for (let i = 0; i < requestDetails.requestHeaders.length; ++i) {
+      if (requestDetails.requestHeaders[i].name.toLowerCase() === 'cookie') {
+
+        // Analisando a string de cookie e adicionando cada um ao map
+        let cookies = requestDetails.requestHeaders[i].value.split(';');
+        cookies.forEach(cookie => {
+          let [name, value] = cookie.split('=').map(s => s.trim());
+          if (cookieMap.has(value)) {
+            cookieMap.get(value).push(requestDetails.originUrl);
+          } else {
+            cookieMap.set(value, [requestDetails.originUrl]);
+          }
+        });
+      }
+    }
+
+    for (let [value, urls] of cookieMap) {
+      if (urls.length > 1) {
+        console.log(`%cPossível sincronização do valor ${value} entre estas URLs: ${urls.join(", ")}`, 'color: red;');
+      }
+    }
+    
   } catch (error) {
     console.error("%cErro ao tratar requisição:", 'color: red;', error);
   }
@@ -69,9 +95,10 @@ const getPrivacyScore = async (tabId, tabUrl) => {
 };
 
 // Monitorando todas as requisições
-browser.webRequest.onBeforeRequest.addListener(
+browser.webRequest.onBeforeSendHeaders.addListener(
   handleThirdPartyRequests,
-  { urls: ["<all_urls>"] }
+  { urls: ["<all_urls>"] },
+  ["requestHeaders"]
 );
 
 // Lidando com as mensagens do runtime
